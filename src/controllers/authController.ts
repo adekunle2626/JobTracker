@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { env } from "../config/env";
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body as {
@@ -50,8 +51,8 @@ export const register = async (req: Request, res: Response) => {
     password: hashPassword,
   });
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  const token = jwt.sign({ userId: user._id }, env.jwtSecret, {
+    expiresIn: env.jwtExpiresIn as jwt.SignOptions["expiresIn"],
   });
 
   return res.status(201).json({
@@ -84,8 +85,8 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const token = jwt.sign({ userId: aUser._id }, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  const token = jwt.sign({ userId: aUser._id }, env.jwtSecret, {
+    expiresIn: env.jwtExpiresIn as jwt.SignOptions["expiresIn"],
   });
 
   return res.status(200).json({

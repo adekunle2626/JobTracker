@@ -44,12 +44,32 @@ export const createApplication = async (req: Request, res: Response) => {
 // get all applications. an admin can get all the applications
 export const getApplications = async (req: Request, res: Response) => {
   const user = req.user!;
-  const filter = user.role === "admin" ? {} : { user: user._id };
+  const filter: any = user.role === "admin" ? {} : { user: user._id };
 
-  const applications = await Application.find(filter).populate(
-    "user",
-    "name email",
-  );
+  // get status from query parameters and filter
+  const filterStatus = req.query.status;
+
+  const allowedStatus = ["applied", "assessment", "offered", "rejected"];
+  if (filterStatus && !allowedStatus.includes(filterStatus.toString())) {
+    return res.status(400).json({
+      message: "Invalid application status",
+    });
+  }
+
+  if (filterStatus) {
+    filter.status = filterStatus;
+  }
+
+  // get company name from query parameter and return matching companies
+  const searchCompany = req.query.company;
+  if (searchCompany) {
+    filter.company = { $regex: searchCompany, $options: "i" };
+  }
+
+  // Fetch applications after building the filter
+  const applications = await Application.find(filter)
+    .sort({ createdAt: -1 })
+    .populate("user", "name email");
 
   return res.json({ applications, count: applications.length });
 };

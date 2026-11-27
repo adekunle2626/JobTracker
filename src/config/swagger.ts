@@ -49,6 +49,7 @@ const outputFile = "./swagger-output.json";
 const endpointsFiles = [
   "./src/routes/authRoutes.ts",
   "./src/routes/applicationRoutes.ts",
+  "./src/routes/dashboardRoutes.ts",
 ];
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

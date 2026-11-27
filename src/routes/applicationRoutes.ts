@@ -58,6 +58,7 @@ router.patch(
       schema: { $ref: '#/definitions/AdminApplicationUpdate' }
     }
   */
+  requireAdmin,
   adminUpdateApplication,
 );
 

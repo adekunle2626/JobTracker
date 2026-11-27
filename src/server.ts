@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes";
 import applicationRoutes from "./routes/applicationRoutes";
 import swaggerUi from "swagger-ui-express";
 import errorHandler from "./middleware/errorHandler";
+import dashboardRoutes from "./routes/dashboardRoutes";
 
 const swaggerFile = require("../swagger-output.json");
 
@@ -20,10 +21,11 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/api", authRoutes);
 app.use("/api", applicationRoutes);
+app.use("/api", dashboardRoutes);
 
 const PORT = process.env.PORT;
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({ message: "Job Tracker is running" });
 });
 

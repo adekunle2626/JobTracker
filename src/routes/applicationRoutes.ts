@@ -9,6 +9,10 @@ import {
 import { adminUpdateApplication } from "../controllers/adminUpdateApplication";
 import { requireAuth } from "../middleware/auth";
 import { requireAdmin } from "../middleware/admin";
+import validate from "../middleware/validate";
+import { createApplicationSchema } from "../validators/applicationValidator";
+import { updateApplicationSchema } from "../validators/applicationValidator";
+import { adminUpdateApplicationSchema } from "../validators/applicationValidator";
 
 const router = Router();
 
@@ -16,6 +20,7 @@ router.use(requireAuth);
 
 router.post(
   "/applications",
+  validate(createApplicationSchema),
   /* #swagger.tags = ['Applications'] */
   /* #swagger.security = [{ "bearerAuth": [] }] */
   createApplication,
@@ -37,6 +42,7 @@ router.get(
 
 router.patch(
   "/applications/:id",
+  validate(updateApplicationSchema),
   /* #swagger.tags = ['Applications'] */
   /* #swagger.security = [{ "bearerAuth": [] }] */
   /*
@@ -59,6 +65,7 @@ router.patch(
     }
   */
   requireAdmin,
+  validate(adminUpdateApplicationSchema),
   adminUpdateApplication,
 );
 

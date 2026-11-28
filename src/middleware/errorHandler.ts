@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const errorHandler = (
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ) => {

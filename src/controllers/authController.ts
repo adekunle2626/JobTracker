@@ -11,31 +11,6 @@ export const register = async (req: Request, res: Response) => {
     password: string;
   };
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-
-  // validating name
-  if (typeof name !== "string" || !name.trim()) {
-    return res
-      .status(400)
-      .json({ message: "Name must be a non-empty string." });
-  }
-
-  // validating email
-  if (typeof email !== "string" || !email.trim()) {
-    return res
-      .status(400)
-      .json({ message: "email must be a non-empty string." });
-  }
-
-  // validating password
-  if (typeof password !== "string" || !password.trim()) {
-    return res.status(400).json({
-      message: "Password must be a non-empty string.",
-    });
-  }
-
   const normalizedEmail = email.trim().toLowerCase();
   const existingEmail = await User.findOne({ email: normalizedEmail });
 
@@ -68,10 +43,6 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
 
   const normalizedEmail = email.trim().toLowerCase();
   const aUser = await User.findOne({ email: normalizedEmail });
